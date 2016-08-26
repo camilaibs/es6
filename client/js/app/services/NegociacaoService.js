@@ -5,7 +5,7 @@ class NegociacaoService {
     }
 
     obtemNegociacoesDaSemana() {
-        return this._http.get('negociacoes/semasna')
+        return this._http.get('negociacoes/semana')
                 .then(response =>
                     response.map(objeto =>
                         new Negociacao(new Date(objeto.data), objeto.quantidade, objeto.valor)

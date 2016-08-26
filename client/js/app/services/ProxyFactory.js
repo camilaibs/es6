@@ -3,19 +3,22 @@ class ProxyFactory {
     static create(objeto, props, acao) {
         return new Proxy(objeto, {
             get(target, prop, receiver) {
-                return function () {
-                    if (props.includes(prop) && typeof(target[prop]) === typeof(Function)) {
-                        Reflect.apply(target[prop], target, arguments);
-                        return acao(target);
+                if(props.includes(prop) && (typeof(prop) == typeof(Function))) {
+                    return function() {
+                        let retorno = Reflect.apply(target[prop], target, arguments);
+                        acao(target);
+                        return retorno;
                     }
-                    return Reflect.get(target, prop, receiver);
                 }
+                return Reflect.get(target, prop, receiver);
             },
+
             set(target, prop, value, receiver) {
-                if (props.includes(prop)) {
+                let retorno = Reflect.set(target, prop, value, receiver);
+                if(props.includes(prop)) {
                     acao(target);
                 }
-                return Reflect.set(target, prop, value, receiver);
+                return retorno;
             }
         });
     }
